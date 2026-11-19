@@ -31,6 +31,20 @@ const btnBukaSekarang = document.getElementById("btnBukaSekarang");
 const btnKembaliGate = document.getElementById("btnKembaliGate");
 const gateUnlockArea = document.getElementById("gateUnlockArea");
 
+const music = document.getElementById("backgroundMusic");
+const musicButton = document.getElementById("musicButton");
+const musicIcon = document.getElementById("musicIcon");
+
+// Fungsi memutar musik
+function playMusic() {
+    if (music) {
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+        }
+    }
+}
+
 // Kunci scroll halaman saat awal
 document.body.classList.add("gate-locked");
 
@@ -45,8 +59,8 @@ function unlockWebsite() {
     }
     document.body.classList.remove("gate-locked");
 
-    // Langsung putar musik saat web terbuka
-    tryAutoPlay();
+    // Pastikan musik tetap berputar saat web terbuka
+    playMusic();
 }
 
 // Fungsi animasi tanggal berjalan selama 2 detik
@@ -133,6 +147,9 @@ function runDateAnimation(onComplete) {
 // Event klik tombol MASUK di layar awal blank hitam
 if (btnMasuk) {
     btnMasuk.addEventListener("click", () => {
+        // Langsung putar musik seketika saat tombol MASUK dipencet
+        playMusic();
+
         // Jalankan animasi tanggal selama 2 detik terlebih dahulu
         runDateAnimation(() => {
             const now = new Date().getTime();
@@ -154,6 +171,7 @@ if (btnMasuk) {
 // Event klik tombol BUKA SEKARANG jika hitungan mundur sudah selesai
 if (btnBukaSekarang) {
     btnBukaSekarang.addEventListener("click", () => {
+        playMusic();
         unlockWebsite();
     });
 }
@@ -161,6 +179,7 @@ if (btnBukaSekarang) {
 // Event tombol kembali ke tampilan MASUK
 if (btnKembaliGate) {
     btnKembaliGate.addEventListener("click", () => {
+        if (music) music.pause();
         gateCountdown.classList.add("hidden");
         if (gateDateAnimation) {
             gateDateAnimation.classList.add("hidden");
@@ -244,17 +263,13 @@ setInterval(updateCountdown, 1000);
    MUSIC
 ========================================= */
 
-const musicButton = document.getElementById("musicButton");
-const music = document.getElementById("backgroundMusic");
-const musicIcon = document.getElementById("musicIcon");
-
 const interactionEvents = ["click", "touchstart", "pointerdown", "scroll", "keydown"];
 
 function handleFirstInteraction() {
     if (document.body.classList.contains("gate-locked")) {
         return;
     }
-    music.play().catch(() => {});
+    playMusic();
 }
 
 function setupInteractionAutoPlay() {
@@ -270,17 +285,19 @@ function removeInteractionAutoPlay() {
 }
 
 // Update tampilan tombol saat musik mulai berputar
-music.addEventListener("play", () => {
-    musicIcon.innerText = "Ⅱ";
-    musicButton.classList.add("playing");
-    removeInteractionAutoPlay();
-});
+if (music) {
+    music.addEventListener("play", () => {
+        if (musicIcon) musicIcon.innerText = "Ⅱ";
+        if (musicButton) musicButton.classList.add("playing");
+        removeInteractionAutoPlay();
+    });
 
-// Update tampilan tombol saat musik dijeda
-music.addEventListener("pause", () => {
-    musicIcon.innerText = "♪";
-    musicButton.classList.remove("playing");
-});
+    // Update tampilan tombol saat musik dijeda
+    music.addEventListener("pause", () => {
+        if (musicIcon) musicIcon.innerText = "♪";
+        if (musicButton) musicButton.classList.remove("playing");
+    });
+}
 
 // Listener untuk interaksi pertama pengguna jika autoplay dicegah browser
 setupInteractionAutoPlay();
@@ -290,23 +307,20 @@ function tryAutoPlay() {
     if (document.body.classList.contains("gate-locked")) {
         return;
     }
-    const playPromise = music.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            // Ditangani listener interaksi pertama
-        });
-    }
+    playMusic();
 }
 
 // Kontrol manual tombol musik
-musicButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (music.paused) {
-        music.play().catch(() => {});
-    } else {
-        music.pause();
-    }
-});
+if (musicButton) {
+    musicButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (music && music.paused) {
+            playMusic();
+        } else if (music) {
+            music.pause();
+        }
+    });
+}
 
 
 /* =========================================
