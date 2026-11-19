@@ -19,14 +19,78 @@
 <body>
 
 <!-- =========================
-     LOADING
+     GATE / LOCK SCREEN
 ========================= -->
 
-<div id="loader">
-    <div class="loader-content">
-        <span>FOR YOU</span>
-        <div class="loader-line"></div>
+<div id="gateOverlay" class="gate-overlay">
+
+    <!-- Tampilan Awal: Blank Hitam & Tulisan Masuk -->
+    <div id="gateInitial" class="gate-initial">
+        <button id="btnMasuk" class="gate-enter-btn" type="button">
+            <span>MASUK</span>
+            <div class="gate-btn-line"></div>
+        </button>
     </div>
+
+    <!-- Animasi Tanggal Berjalan (2 Detik Saat Dipencet Masuk) -->
+    <div id="gateDateAnimation" class="gate-date-anim hidden">
+        <p class="gate-anim-subtitle">COUNTING OUR MOMENTS</p>
+
+        <div class="gate-date-display">
+            <span id="animDay" class="anim-num">00</span>
+            <span class="anim-dot">·</span>
+            <span id="animMonth" class="anim-num">00</span>
+            <span class="anim-dot">·</span>
+            <span id="animYear" class="anim-num">0000</span>
+        </div>
+
+        <div class="gate-anim-line-wrapper">
+            <div id="gateAnimLine" class="gate-anim-line"></div>
+        </div>
+
+        <p id="animDateLabel" class="gate-anim-label">Mengingat kembali setiap hari bersamamu...</p>
+    </div>
+
+    <!-- Tampilan Countdown (Muncul setelah klik Masuk jika belum tanggalnya) -->
+    <div id="gateCountdown" class="gate-countdown-content hidden">
+        <p class="gate-subtitle">A SPECIAL MOMENT IS WAITING</p>
+        <h2 class="gate-title">Belum Waktunya, Sayang ♡</h2>
+        
+        <p class="gate-desc">
+            Website ini baru bisa dibuka pada tanggal <span id="gateTargetDateText">12 Desember 2026</span>.
+            <br>
+            Tunggu sampai hitungan mundurnya selesai ya!
+        </p>
+
+        <div class="gate-timer">
+            <div class="gate-time-box">
+                <span id="gateDays">00</span>
+                <small>HARI</small>
+            </div>
+            <div class="gate-time-box">
+                <span id="gateHours">00</span>
+                <small>JAM</small>
+            </div>
+            <div class="gate-time-box">
+                <span id="gateMinutes">00</span>
+                <small>MENIT</small>
+            </div>
+            <div class="gate-time-box">
+                <span id="gateSeconds">00</span>
+                <small>DETIK</small>
+            </div>
+        </div>
+
+        <div id="gateUnlockArea" class="gate-unlock-area hidden">
+            <button id="btnBukaSekarang" class="gate-enter-btn" type="button">
+                <span>BUKA SEKARANG ♡</span>
+                <div class="gate-btn-line"></div>
+            </button>
+        </div>
+
+        <button id="btnKembaliGate" class="gate-back-link" type="button">← Kembali</button>
+    </div>
+
 </div>
 
 
@@ -76,7 +140,7 @@
             and words that I could never say enough.
         </p>
 
-        <a href="#story" class="scroll-button">
+        <a href="#intro" class="scroll-button">
             <span>SCROLL TO BEGIN</span>
             <span class="arrow">↓</span>
         </a>
@@ -90,7 +154,7 @@
      INTRO
 ========================= -->
 
-<section class="intro section">
+<section id="intro" class="intro section">
 
     <div class="container">
 
